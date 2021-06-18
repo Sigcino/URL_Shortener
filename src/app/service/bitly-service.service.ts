@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 export class BitlyServiceService {
 
   private url = "https://api-ssl.bitly.com/v4/shorten"; //url to bitly web API
-  private token = "{token-here}"; //TOKEN here
+  private token = "85cb9d050c6b2751669695f8db8ea352c795663d"; //TOKEN here
 
 
 
