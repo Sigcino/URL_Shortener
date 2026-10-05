@@ -1,32 +1,47 @@
-<div >
-    
+<section class="card">
+  <header class="card-header">
+    <h1>Shorten a long link</h1>
+    <p>Paste any URL below to get a short, shareable Bitly link.</p>
+  </header>
 
-    <div class="col-sm 12">
-        <div class="col-sm-6 mx-auto shadow-lg">
-            <h2 class="p-2">Link Shortener</h2>
-            
-            <div class="p-4">
-                <form >
-                    <div class="form-group">
-                        <label for="URL">Paste URL Here:</label>
-                        <input type="url" [(ngModel)]="linkToShorten.long_url" name="long_url" placeholder="https://example.com" class="form-control col-sm-6 border border-secondary" required>
-                        <div *ngIf="error">{{message}}</div>
-                    </div>
-                    <div class="form-group">
-                        <button type="button" (click)="getShortLink()" class="btn btn-outline-success">Submit</button>
-                    </div>
-
-                    <hr>
-                    
-                    <div *ngIf="urlResult; else elseBlock">
-                        <label>Here is your link</label>
-                        <input type="text" readonly [value]="answer.link" class="form-control col-sm-10" disabled value="">
-                    </div>
-                    <ng-template #elseBlock><i>** Simply paste your Url and click the Submit button when done and your results will appear here. I have not validated this input field please put your URL like this: https://www.google.com/ </i></ng-template>
-
-
-                </form>
-            </div>
-        </div>
+  <form class="shorten-form" (ngSubmit)="getShortLink()" novalidate>
+    <label class="visually-hidden" for="long_url">Long URL</label>
+    <div class="input-row" [class.has-error]="errorMessage">
+      <svg class="input-icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M10 13a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1.5 1.5M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1.5-1.5"/>
+      </svg>
+      <input
+        id="long_url"
+        name="long_url"
+        type="url"
+        inputmode="url"
+        autocomplete="url"
+        autocapitalize="off"
+        spellcheck="false"
+        placeholder="https://example.com/a/very/long/link"
+        [(ngModel)]="linkToShorten.long_url"
+        (ngModelChange)="errorMessage = ''"
+        [disabled]="loading"
+        [attr.aria-invalid]="!!errorMessage"
+        aria-describedby="url-error">
     </div>
-</div>
+    <button type="submit" class="btn btn-primary" [disabled]="loading || !linkToShorten.long_url">
+      <span *ngIf="loading" class="spinner" aria-hidden="true"></span>
+      {{ loading ? 'Shortening…' : 'Shorten' }}
+    </button>
+  </form>
+
+  <p id="url-error" class="error" role="alert" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+  <div class="result" *ngIf="result" aria-live="polite">
+    <span class="result-label">Your short link</span>
+    <div class="result-row">
+      <a class="short-link" [href]="result.link" target="_blank" rel="noopener noreferrer">{{ result.link }}</a>
+      <button type="button" class="btn btn-secondary" (click)="copyLink()">
+        {{ copied ? 'Copied!' : 'Copy' }}
+      </button>
+    </div>
+    <p class="original" [title]="result.long_url || ''">{{ result.long_url }}</p>
+    <button type="button" class="btn-link" (click)="reset()">Shorten another link</button>
+  </div>
+</section>
