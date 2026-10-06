@@ -3,13 +3,16 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "test": "ng test",
+    "start": "node --openssl-legacy-provider node_modules/@angular/cli/bin/ng serve",
+    "build": "node --openssl-legacy-provider node_modules/@angular/cli/bin/ng build --prod",
+    "test": "node --openssl-legacy-provider node_modules/@angular/cli/bin/ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
   "private": true,
+  "engines": {
+    "node": "24.x"
+  },
   "dependencies": {
     "@angular/animations": "~11.2.12",
     "@angular/common": "~11.2.12",
